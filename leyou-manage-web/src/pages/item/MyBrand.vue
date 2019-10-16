@@ -16,7 +16,17 @@
       :total-items="totalBrands"
       :loading="loading"
       class="elevation-1"
-    ></v-data-table>
+    >
+      <template slot="items" slot-scope="props">
+        <td class="text-xs-center">{{ props.item.id }}</td>
+        <td class="text-xs-center">{{ props.item.name }}</td>
+        <td class="text-xs-center"><img v-if="props.item.image" :src="props.item.image" width="130" height="40"/></td>
+        <td class="text-xs-center">{{ props.item.letter }}</td>
+        <td>
+
+        </td>
+      </template>
+    </v-data-table>
   </div>
 </template>
 
