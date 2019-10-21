@@ -23,7 +23,7 @@
       </v-flex>
       <v-flex>
         <v-upload
-          v-model="brand.image" url="/item/upload" :multiple="false" :pic-width="250" :pic-height="90"
+          v-model="brand.image" url="/upload/image" :multiple="false" :pic-width="250" :pic-height="90"
         />
       </v-flex>
     </v-layout>
@@ -59,6 +59,12 @@
           letter: "",
           categories: []
         },
+        bodyd: {
+          name: "",
+          image: "",
+          letter: "",
+          categories: []
+        },
         imageDialogVisible:false
       }
     },
@@ -76,11 +82,12 @@
         if (this.$refs.brandForm.validate()) {
           this.brand.categories = this.brand.categories.map(c => c.id);
           this.brand.letter = this.brand.letter.toUpperCase();
-          // 将数据提交到后台
+
+          //将数据提交到后台
           this.$http({
             method: this.isEdit ? 'put' : 'post',
             url: '/item/brand',
-            data: this.$qs.stringify(this.brand)
+            data: this.$qs.stringify(this.brand, {arrayFormat: 'repeat'})
           }).then(() => {
             // 关闭窗口
             this.$message.success("保存成功！");
@@ -88,6 +95,7 @@
           }).catch(() => {
             this.$message.error("保存失败！");
           });
+
         }
       },
       clear() {

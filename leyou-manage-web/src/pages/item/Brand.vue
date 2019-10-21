@@ -103,10 +103,9 @@
         },
         deep: true
       },
-      search: {
-        handler() {
-          this.getDataFromApi();
-        }
+      search() {
+        this.pagination.page = 1;
+        this.getDataFromApi();
       },
       show(val, oldVal) {
         // 表单关闭后重新加载数据
@@ -152,11 +151,19 @@
       getDataFromApi() {
         this.loading = true;
         // 200ms后返回假数据
-        window.setTimeout(() => {
-          this.items = brandData.slice(0,4);
-          this.totalItems = 100
-          this.loading = false;
-        }, 200)
+        this.$http.get('/item/brand/page', {
+          params: {
+            page: this.pagination.page,//当前页
+            rows: this.pagination.rowsPerPage,//每页大小
+            sortBy: this.pagination.sortBy, //分页字段
+            desc: this.pagination.descending,//第几页
+            key: this.search,//查询条件
+          }
+        })
+          .then(resp => {
+            this.items = resp.data.items;
+            this.totalItems = resp.data.total;
+          })
       }
     }
   }
